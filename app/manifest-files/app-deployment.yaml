@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: markbotros/frontend-khaled:latest 
+        image: markbotros/frontend-khaled:IMAGE_TAG
         ports:
         - containerPort: 3000
