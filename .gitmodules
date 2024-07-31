@@ -1,0 +1,3 @@
+[submodule "frontend_app"]
+	path = frontend_app
+	url = https://github.com/marcadel/app.git
