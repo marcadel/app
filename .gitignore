@@ -1,0 +1,12 @@
+# Terraform files in the k8s-cluster directory
+k8s-cluster/*.tfstate
+k8s-cluster/*.tfstate.*
+k8s-cluster/crash.log
+k8s-cluster/*.tfvars
+k8s-cluster/*.tfvars.json
+k8s-cluster/override.tf
+k8s-cluster/override.tf.json
+k8s-cluster/*_override.tf
+k8s-cluster/*_override.tf.json
+k8s-cluster/.terraform/
+k8s-cluster/.terraform.lock.hcl
