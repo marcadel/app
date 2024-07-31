@@ -1,0 +1,31 @@
+# jenkins-deploy.yml
+- hosts: localhost
+  tasks:
+    - name: Apply Jenkins namespace
+      command: kubectl create namespace jenkins
+      ignore_errors: yes
+
+    - name: Apply Jenkins service account
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-service-account.yaml') }}"
+
+    - name: Apply Jenkins role
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-role.yaml') }}"
+
+    - name: Apply Jenkins role binding
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-role-binding.yaml') }}"
+
+    - name: Apply Jenkins deployment
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-deployment.yaml') }}"
+
+    - name: Apply Jenkins service 
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-service.yaml') }}"
