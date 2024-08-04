@@ -20,6 +20,15 @@ spec:
         }
     }
     stages {
+        stage('Check Kubernetes API') {
+            steps {
+                container('kubectl') {
+                    script {
+                        sh 'curl -k https://kubernetes.default.svc'
+                    }
+                }
+            }
+        }
         stage('deploy to eks') {
             steps {
                 container('kubectl') {
@@ -38,7 +47,6 @@ spec:
     }
     post {
         failure {
-            // Notify or handle the failure
             echo 'Deployment failed!'
         }
     }
