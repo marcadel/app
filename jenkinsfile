@@ -19,7 +19,6 @@ spec:
 """
         }
     }
-    }
     stages {
         stage('deploy to eks') {
             steps {
