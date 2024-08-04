@@ -1,0 +1,30 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml """
+kind: Pod
+metadata:
+  name: kaniko-kubectl
+  namespace: jenkins
+spec:
+  serviceAccountName: jenkins
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - cat
+"""
+        }
+    }
+    stages {
+        stage('Build-Docker-Image') {
+            steps {
+                container('kaniko') {
+                    script {
+                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination abanobmorkos10/pwc_app:${BUILD_NUMBER}'
+                    }
+                }
+            }
+        }
+    }
+}
