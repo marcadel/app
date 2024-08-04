@@ -1,44 +1,6 @@
-// pipeline {
-//     agent {
-//         kubernetes {
-//             yaml """
-// kind: Pod
-// metadata:
-//   name: kaniko-kubectl
-//   namespace: jenkins
-// spec:
-//   serviceAccountName: jenkins
-//   containers:
-//   - name: kaniko
-//     image: gcr.io/kaniko-project/executor:debug
-//     command:
-//     - cat
-//     tty: true
-// """
-//         }
-//     }
-//     stages {
-//         stage('Build-Docker-Image') {
-//             steps {
-//                 container('kaniko') {
-//                     script {
-//                         sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination abanobmorkos10/pwc_app:${BUILD_NUMBER}'
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-
-
-
-
 pipeline {
     agent {
         kubernetes {
-            label 'jenkinsagent'
-            defaultContainer 'kaniko'
             yaml """
 kind: Pod
 metadata:
@@ -53,19 +15,37 @@ spec:
       - "/bin/bash"
       - "-c"
       - "sleep 99d"
-
+    tty: true
 """
         }
+    }
+    environment {
+        // Example environment variables
+        KUBECONFIG = credentials('kubeconfig-credentials')
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
     stages {
         stage('deploy to eks') {
             steps {
                 container('kubectl') {
-                        script {
+                    script {
+                        try {
                             sh 'kubectl version'
+                        } catch (Exception e) {
+                            echo "Error: ${e}"
+                            currentBuild.result = 'FAILURE'
+                            throw e
                         }
+                    }
                 }
             }
+        }
+    }
+    post {
+        failure {
+            // Notify or handle the failure
+            echo 'Deployment failed!'
         }
     }
 }
