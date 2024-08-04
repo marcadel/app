@@ -1,6 +1,44 @@
+// pipeline {
+//     agent {
+//         kubernetes {
+//             yaml """
+// kind: Pod
+// metadata:
+//   name: kaniko-kubectl
+//   namespace: jenkins
+// spec:
+//   serviceAccountName: jenkins
+//   containers:
+//   - name: kaniko
+//     image: gcr.io/kaniko-project/executor:debug
+//     command:
+//     - cat
+//     tty: true
+// """
+//         }
+//     }
+//     stages {
+//         stage('Build-Docker-Image') {
+//             steps {
+//                 container('kaniko') {
+//                     script {
+//                         sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination abanobmorkos10/pwc_app:${BUILD_NUMBER}'
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+
+
+
+
 pipeline {
     agent {
         kubernetes {
+            label 'jenkinsagent'
+            defaultContainer 'kaniko'
             yaml """
 kind: Pod
 metadata:
@@ -9,21 +47,23 @@ metadata:
 spec:
   serviceAccountName: jenkins
   containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
+  - name: kubectl
+    image: abanobmorkos10/aws-kubectl
     command:
-    - cat
-    tty: true
+      - "/bin/bash"
+      - "-c"
+      - "sleep 99d"
+
 """
         }
     }
     stages {
-        stage('Build-Docker-Image') {
+        stage('deploy to eks') {
             steps {
-                container('kaniko') {
-                    script {
-                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination abanobmorkos10/pwc_app:${BUILD_NUMBER}'
-                    }
+                container('kubectl') {
+                        script {
+                            sh 'kubectl version'
+                        }
                 }
             }
         }
