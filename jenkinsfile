@@ -20,16 +20,52 @@ spec:
         }
     }
     stages {
-        stage('Check Kubernetes API') {
+        stage('Check DNS') {
             steps {
                 container('kubectl') {
                     script {
-                        sh 'curl -k https://kubernetes.default.svc'
+                        try {
+                            sh 'nslookup kubernetes.default.svc'
+                        } catch (Exception e) {
+                            echo "Error: ${e}"
+                            currentBuild.result = 'FAILURE'
+                            throw e
+                        }
                     }
                 }
             }
         }
-        stage('deploy to eks') {
+        stage('Check Kubernetes API') {
+            steps {
+                container('kubectl') {
+                    script {
+                        try {
+                            sh 'curl -k https://kubernetes.default.svc'
+                        } catch (Exception e) {
+                            echo "Error: ${e}"
+                            currentBuild.result = 'FAILURE'
+                            throw e
+                        }
+                    }
+                }
+            }
+        }
+        stage('Test kubectl Command') {
+            steps {
+                container('kubectl') {
+                    script {
+                        try {
+                            sh 'kubectl get pods --all-namespaces'
+                        } catch (Exception e) {
+                            echo "Error: ${e}"
+                            currentBuild.result = 'FAILURE'
+                            throw e
+                        }
+                    }
+                }
+            }
+        }
+        stage('Deploy to EKS') {
             steps {
                 container('kubectl') {
                     script {
