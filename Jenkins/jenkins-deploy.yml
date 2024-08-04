@@ -10,6 +10,11 @@
         state: present
         definition: "{{ lookup('file', 'jenkins-service-account.yaml') }}"
 
+    - name: Apply Jenkins service Secret
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-service-account.yaml') }}"
+
     - name: Apply Jenkins role
       kubernetes.core.k8s:
         state: present
