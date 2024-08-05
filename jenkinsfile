@@ -37,7 +37,7 @@ spec:
             steps {
                 container('kaniko') {
                     script {
-                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination markbotros/khaled_app'
+                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --no-push'
                     }
                 }
             }
