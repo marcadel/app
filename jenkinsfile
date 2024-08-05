@@ -33,6 +33,15 @@ spec:
         }
     }
     stages {
+        stage('Build-Docker-Image') {
+            steps {
+                container('kaniko') {
+                    script {
+                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination markbotros/khaled_app:${BUILD_NUMBER}'
+                    }
+                }
+            }
+        }
         stage('deploy to eks') {
             steps {
                 container('kubectl') {
