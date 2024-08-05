@@ -5,6 +5,11 @@
       command: kubectl create namespace jenkins
       ignore_errors: yes
 
+    - name: Create Storage Class
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jenkins-storageClass.yaml') }}"
+
     - name: Apply Jenkins service account
       kubernetes.core.k8s:
         state: present
