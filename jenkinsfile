@@ -16,6 +16,19 @@ spec:
       - "-c"
       - "sleep 99d"
     tty: true
+
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+      - name: kaniko-secret
+        mountPath: /kaniko/.docker/
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: kaniko-secret
 """
         }
     }
