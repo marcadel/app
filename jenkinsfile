@@ -37,7 +37,7 @@ spec:
             steps {
                 container('kaniko') {
                     script {
-                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination markbotros/khaled_app:${BUILD_NUMBER}'
+                        sh '/kaniko/executor --dockerfile app/Dockerfile --context app --destination abanoubmorkos10/khaled_app:${BUILD_NUMBER}'
                     }
                 }
             }
