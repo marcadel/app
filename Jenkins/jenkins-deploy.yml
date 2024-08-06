@@ -34,3 +34,8 @@
       kubernetes.core.k8s:
         state: present
         definition: "{{ lookup('file', 'jenkins-service.yaml') }}"
+
+    - name: kaniko secret 
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'kaniko-secret.yaml') }}"

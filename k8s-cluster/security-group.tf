@@ -1,3 +1,5 @@
+
+##for trial
 resource "aws_security_group" "eks_cluster_security_group" {
   vpc_id = aws_vpc.main.id
   name   = "${var.cluster_name}-sg"

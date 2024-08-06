@@ -38,6 +38,7 @@ variable "public_subnets" {
   default     = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
+##for trial
 variable "private_subnets" {
   description = "Private subnet CIDR blocks"
   default     = ["10.0.3.0/24", "10.0.4.0/24"]
